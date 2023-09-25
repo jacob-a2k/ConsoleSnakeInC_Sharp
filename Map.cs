@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,17 +9,17 @@ namespace ConsoleSnakeGame
 {
     internal class Map
     {
-        char[,] gameMap;
-        int width;
-        int height;
+        private char[,] gameMap;
+        private int width;
+        private int height;
         public Map(int width = 20, int height = 10)
         {
             this.width = width;
             this.height = height;
             this.gameMap = new char[height, width];
-            fillMap();
+            FillMap();
         }
-        public void printMap()
+        public void PrintMap()
         {
             for(int i = 0; i < height; i++)
             {
@@ -29,7 +30,7 @@ namespace ConsoleSnakeGame
                 Console.WriteLine();
             }
         }
-        private void fillMap()
+        private void FillMap()
         {
             gameMap[0,0] = '+';
             for (int i = 1; i < width - 1; ++i)
@@ -52,6 +53,14 @@ namespace ConsoleSnakeGame
                 gameMap[height - 1,i] = '-';
             }
             gameMap[height - 1,width - 1] = '+';
+        }
+        public void SetToMap(Point point,char sign)
+        {
+            gameMap[point.GetY() - 1,point.GetX() -1] = sign;
+        }
+        public char GetFromMap(Point point)
+        {
+            return gameMap[point.GetX(), point.GetY()];
         }
     }
 }
