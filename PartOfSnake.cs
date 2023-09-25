@@ -20,6 +20,11 @@ namespace ConsoleSnakeGame
             this.position = position;
             this.nextPart = nextPart;
         }
+        public PartOfSnake(PartOfSnake previousPart)
+        {
+            this.position = previousPart.position;
+            this.nextPart = previousPart;
+        }
         public Point GetPosition()
         {
             return this.position;
