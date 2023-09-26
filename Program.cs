@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ConsoleSnakeGame
 {
@@ -35,9 +34,15 @@ namespace ConsoleSnakeGame
             char chosenDirection = actualDirection;
             int nextXpos = 5;
             int nextYpos = 5;
-            while (error)
+            ConsoleKeyInfo cki;
+            while (!error)
             {
-                 // trzeba tu jakos sprawdzic czy uzytkownik wcisal jakis klawisz
+                if(Console.KeyAvailable)
+                {
+                    cki = Console.ReadKey();
+                    Console.WriteLine();
+                    Console.WriteLine("Input catch in time: {0}", cki.KeyChar);
+                }
             }
 
         }
@@ -60,5 +65,6 @@ namespace ConsoleSnakeGame
             }
             return false;
         }
+        public static bool KeyAvailable { get; }
     }
 }
