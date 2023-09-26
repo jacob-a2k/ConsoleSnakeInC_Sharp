@@ -58,9 +58,11 @@ namespace ConsoleSnakeGame
         {
             gameMap[point.GetY() - 1,point.GetX() -1] = sign;
         }
-        public char GetFromMap(Point point)
+        public char GetSignFromMap(Point point)
         {
             return gameMap[point.GetX(), point.GetY()];
         }
+        public int GetWidth() { return width; }
+        public int GetHeight() { return height; }
     }
 }
