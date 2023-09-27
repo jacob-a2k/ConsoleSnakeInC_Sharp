@@ -22,27 +22,89 @@ namespace ConsoleSnakeGame
             Map map = new Map(width, height);
             Snake snake = new Snake();
 
-            bool error = false; // dlaczego gdybym wstawił 'public' przed typem bool to compilator wyswietla błąd
+            bool error = false;
             Point positionBeforeLoop = new Point(0, 0);
             Point prevPosition = new Point(0, 0);
 
             Point foodPosition = new Point(0, 0);
             foodPosition = GetNextPositionForFood(map);
-            map.SetToMap(foodPosition, 'x');
+            map.SetSignToMap(foodPosition, 'x');
 
             char actualDirection = 'd';
             char chosenDirection = actualDirection;
             int nextXpos = 5;
             int nextYpos = 5;
-            ConsoleKeyInfo cki;
+
             while (!error)
             {
                 if(Console.KeyAvailable)
                 {
-                    cki = Console.ReadKey();
+                    ConsoleKeyInfo cki = Console.ReadKey();
+                    chosenDirection = cki.KeyChar;
                     Console.WriteLine();
-                    Console.WriteLine("Input catch in time: {0}", cki.KeyChar);
+                    Console.WriteLine("Input catch in time: {0}", chosenDirection);
                 }
+                if (IsUserChooseCorrectDirection(chosenDirection, actualDirection))
+                {
+                    switch (chosenDirection)
+                    {
+                        case 'd':
+                            nextXpos++;
+                            break;
+                        case 's':
+                            nextYpos++;
+                            break;
+                        case 'w':
+                            nextYpos--;
+                            break;
+                        case 'a':
+                            nextXpos--;
+                            break;
+                        default: Console.WriteLine("Something goes wrong!");
+                            Thread.Sleep(1000);
+                            error = true;
+                            break;
+                    }
+                    actualDirection = chosenDirection;
+                }
+                else
+                {
+                    chosenDirection = actualDirection;
+                    continue;
+                }
+                Point nextPosition = new Point(nextYpos, nextXpos);
+                positionBeforeLoop = nextPosition;
+
+                if(IsNextPositionEmpty(map, nextPosition))
+                {
+                    error = true;
+                    map.PrintMap();
+                    Console.WriteLine("----- Game Over -----");
+                    Thread.Sleep(3000);
+                    continue;
+                }
+                if(nextPosition == foodPosition)
+                {
+                    snake.Increase(nextPosition);
+                    foodPosition = GetNextPositionForFood(map);
+                    map.SetSignToMap(foodPosition, 'x');
+                }
+                PartOfSnake current = new PartOfSnake(snake.GetHead());
+                while(current != null)
+                {
+                    prevPosition = current.GetPosition();
+                    current.SetPosition(nextPosition);
+                    Point position = new Point(current.GetPosition());
+                    map.SetSignToMap(position, 'o');
+                    nextPosition = prevPosition;
+                    current = current.GetNext();
+                }
+                map.SetSignToMap(prevPosition, ' ');
+                nextPosition = positionBeforeLoop;
+                map.PrintMap();
+                Console.ReadLine();
+                Thread.Sleep(snake.GetSnakeSpeed());
+                Console.Clear();
             }
 
         }
@@ -51,8 +113,8 @@ namespace ConsoleSnakeGame
             while (true)
             {
                 Random rnd = new Random();
-                int rndRow = rnd.Next(1, map.GetWidth());
-                int rndColumn = rnd.Next(1, map.GetHeight());
+                int rndRow = rnd.Next(1, map.GetHeight() -1);
+                int rndColumn = rnd.Next(1, map.GetWidth() -1);
                 Point foodPosition = new Point(rndRow, rndColumn);
                 if (IsEmptyLocationForFood(map, foodPosition)) { return foodPosition; }
             }
@@ -66,5 +128,37 @@ namespace ConsoleSnakeGame
             return false;
         }
         public static bool KeyAvailable { get; }
+        public static bool IsUserChooseCorrectDirection(char chosenDirection, char actualDirection)
+        {
+            if (IsUserChoseCorectSign(chosenDirection))
+            {
+                if (actualDirection == 'd' && chosenDirection == 'a' ||
+                    actualDirection == 'a' && chosenDirection == 'd' ||
+                    actualDirection == 's' && chosenDirection == 'w' ||
+                    actualDirection == 'w' && chosenDirection == 's')
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        public static bool IsUserChoseCorectSign(char dir)
+        {
+            if (dir == 'a' || dir == 's' || dir == 'd' || dir == 'w')
+            {
+                return true;
+            }
+            return false;
+        }
+        private static bool IsNextPositionEmpty(Map map, Point point)
+        {
+            if(map.GetSignFromMap(point) == '|' || map.GetSignFromMap(point) == '-'
+                                                || map.GetSignFromMap(point) == 'o')
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

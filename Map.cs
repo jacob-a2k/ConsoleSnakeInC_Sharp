@@ -54,9 +54,9 @@ namespace ConsoleSnakeGame
             }
             gameMap[height - 1,width - 1] = '+';
         }
-        public void SetToMap(Point point,char sign)
+        public void SetSignToMap(Point point,char sign)
         {
-            gameMap[point.GetY() - 1,point.GetX() -1] = sign;
+            gameMap[point.GetX() - 1, point.GetY() -1] = sign;
         }
         public char GetSignFromMap(Point point)
         {

@@ -11,6 +11,12 @@ namespace ConsoleSnakeGame
     {
         private int x;
         private int y;
+
+        public Point(Point point)
+        {
+            this.x = point.x;
+            this.y = point.y;
+        }
         public Point(int x = 5, int y = 5)
         {
             this.x = x;
