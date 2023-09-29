@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -24,6 +25,11 @@ namespace ConsoleSnakeGame
         }
         public int GetX() { return x;}
         public int GetY() { return y;}
+        public void SetPointPosition(Point point)
+        {
+            this.x = point.x;
+            this.y = point.y;
+        }
         public static bool operator==(Point firstPoint, Point secondPoint)
         {
             return (firstPoint.GetX() == secondPoint.GetX() 

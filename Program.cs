@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -27,7 +28,7 @@ namespace ConsoleSnakeGame
             Point prevPosition = new Point(0, 0);
 
             Point foodPosition = new Point(0, 0);
-            foodPosition = GetNextPositionForFood(map);
+            foodPosition.SetPointPosition(GetNextPositionForFood(map));
             map.SetSignToMap(foodPosition, 'x');
 
             char actualDirection = 'd';
@@ -42,7 +43,6 @@ namespace ConsoleSnakeGame
                     ConsoleKeyInfo cki = Console.ReadKey();
                     chosenDirection = cki.KeyChar;
                     Console.WriteLine();
-                    Console.WriteLine("Input catch in time: {0}", chosenDirection);
                 }
                 if (IsUserChooseCorrectDirection(chosenDirection, actualDirection))
                 {
@@ -72,10 +72,10 @@ namespace ConsoleSnakeGame
                     chosenDirection = actualDirection;
                     continue;
                 }
-                Point nextPosition = new Point(nextYpos, nextXpos);
-                positionBeforeLoop = nextPosition;
+                Point nextPosition = new Point(nextXpos, nextYpos);
+                positionBeforeLoop.SetPointPosition(nextPosition);
 
-                if(IsNextPositionEmpty(map, nextPosition))
+                if(!IsNextPositionEmpty(map, nextPosition))
                 {
                     error = true;
                     map.PrintMap();
@@ -86,23 +86,23 @@ namespace ConsoleSnakeGame
                 if(nextPosition == foodPosition)
                 {
                     snake.Increase(nextPosition);
-                    foodPosition = GetNextPositionForFood(map);
+                    foodPosition.SetPointPosition(GetNextPositionForFood(map));
                     map.SetSignToMap(foodPosition, 'x');
                 }
                 PartOfSnake current = new PartOfSnake(snake.GetHead());
                 while(current != null)
                 {
-                    prevPosition = current.GetPosition();
+                    prevPosition.SetPointPosition(current.GetPosition());
                     current.SetPosition(nextPosition);
                     Point position = new Point(current.GetPosition());
                     map.SetSignToMap(position, 'o');
-                    nextPosition = prevPosition;
+                    nextPosition.SetPointPosition(prevPosition);
                     current = current.GetNext();
                 }
-                map.SetSignToMap(prevPosition, ' ');
-                nextPosition = positionBeforeLoop;
+                map.SetSignToMap(prevPosition,' ');
+                nextPosition.SetPointPosition(positionBeforeLoop);
+                Console.Clear();
                 map.PrintMap();
-                Console.ReadLine();
                 Thread.Sleep(snake.GetSnakeSpeed());
                 Console.Clear();
             }
@@ -115,7 +115,7 @@ namespace ConsoleSnakeGame
                 Random rnd = new Random();
                 int rndRow = rnd.Next(1, map.GetHeight() -1);
                 int rndColumn = rnd.Next(1, map.GetWidth() -1);
-                Point foodPosition = new Point(rndRow, rndColumn);
+                Point foodPosition = new Point(rndColumn, rndRow);
                 if (IsEmptyLocationForFood(map, foodPosition)) { return foodPosition; }
             }
         }
@@ -156,9 +156,9 @@ namespace ConsoleSnakeGame
             if(map.GetSignFromMap(point) == '|' || map.GetSignFromMap(point) == '-'
                                                 || map.GetSignFromMap(point) == 'o')
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
     }
 }

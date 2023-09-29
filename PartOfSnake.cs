@@ -13,7 +13,7 @@ namespace ConsoleSnakeGame
         public PartOfSnake(Point position)
         {
             this.position = position;
-            this.nextPart = nextPart;
+            this.nextPart = null;
         }
         public PartOfSnake(Point position, PartOfSnake nextPart)
         {
@@ -23,7 +23,7 @@ namespace ConsoleSnakeGame
         public PartOfSnake(PartOfSnake previousPart)
         {
             this.position = previousPart.position;
-            this.nextPart = previousPart;
+            this.nextPart = previousPart.nextPart;
         }
         public Point GetPosition()
         {
@@ -31,7 +31,7 @@ namespace ConsoleSnakeGame
         }
         public void SetPosition(Point position)
         {
-            this.position = position;
+            this.position.SetPointPosition(position);
         }
         public PartOfSnake GetNext()
         {
