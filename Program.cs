@@ -35,6 +35,7 @@ namespace ConsoleSnakeGame
             char chosenDirection = actualDirection;
             int nextXpos = 5;
             int nextYpos = 5;
+            int totalNumOfEatenFood = 0;
 
             while (!error)
             {
@@ -85,6 +86,7 @@ namespace ConsoleSnakeGame
                 }
                 if(nextPosition == foodPosition)
                 {
+                    totalNumOfEatenFood++;
                     snake.Increase(nextPosition);
                     foodPosition.SetPointPosition(GetNextPositionForFood(map));
                     map.SetSignToMap(foodPosition, 'x');
@@ -106,6 +108,7 @@ namespace ConsoleSnakeGame
                 Thread.Sleep(snake.GetSnakeSpeed());
                 Console.Clear();
             }
+            Console.WriteLine("Congratulation! Your score is {0} points!", totalNumOfEatenFood);
 
         }
         private static Point GetNextPositionForFood(Map map)
