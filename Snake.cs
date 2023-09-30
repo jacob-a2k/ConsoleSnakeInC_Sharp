@@ -12,7 +12,7 @@ namespace ConsoleSnakeGame
         private int size;
         private int speed;
         private PartOfSnake head;
-        private void IncreaseSnakeSpeed() { speed = speed / 2; }
+        private void IncreaseSnakeSpeed() { speed = (speed / 2); }
         public Snake(int size = 1, int speed = 100)
         {
             this.size = size;

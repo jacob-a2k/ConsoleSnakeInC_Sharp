@@ -5,6 +5,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+
 
 namespace ConsoleSnakeGame
 {
@@ -109,7 +111,18 @@ namespace ConsoleSnakeGame
                 Console.Clear();
             }
             Console.WriteLine("Congratulation! Your score is {0} points!", totalNumOfEatenFood);
+            Console.WriteLine("Write your Name and Surname to put you to scoreboard");
+            string name = Console.ReadLine();
 
+            string rootPath = @"D:\dev\dotnet\ConsoleSnakeGame\WinnerList.txt";
+            List<string> lines = File.ReadAllLines(rootPath).ToList();
+            lines.Add($"{name} - score: {totalNumOfEatenFood}");
+            Console.Clear();
+            foreach(string line in lines)
+            {
+                Console.WriteLine(line);
+            }
+            File.WriteAllLines(rootPath, lines);
         }
         private static Point GetNextPositionForFood(Map map)
         {
