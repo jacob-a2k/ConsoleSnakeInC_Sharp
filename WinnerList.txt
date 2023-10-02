@@ -1,2 +1,10 @@
-jakub - score: 9
-Izabela - score: 4
+anonumous,12
+mama,8
+seweryn,7
+ola,6
+jakub,5
+marcin,4
+jakub,3
+dorota,2
+piotr,1
+xyz,1

@@ -6,7 +6,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
+using System.Globalization;
+using System.IO.Pipes;
 
 namespace ConsoleSnakeGame
 {
@@ -112,17 +113,37 @@ namespace ConsoleSnakeGame
             }
             Console.WriteLine("Congratulation! Your score is {0} points!", totalNumOfEatenFood);
             Console.WriteLine("Write your Name and Surname to put you to scoreboard");
-            string name = Console.ReadLine();
+            string player = Console.ReadLine();
+
+
 
             string rootPath = @"D:\dev\dotnet\ConsoleSnakeGame\WinnerList.txt";
+            List<Winner> people = new List<Winner>();
             List<string> lines = File.ReadAllLines(rootPath).ToList();
-            lines.Add($"{name} - score: {totalNumOfEatenFood}");
-            Console.Clear();
-            foreach(string line in lines)
-            {
-                Console.WriteLine(line);
-            }
+            lines.Add($"{player}, {totalNumOfEatenFood}");
             File.WriteAllLines(rootPath, lines);
+
+            foreach(var line in lines)
+            {
+                string[] entries = line.Split(',');
+                Winner newPerson = new Winner();
+                newPerson.name = entries[0];
+                newPerson.score = Convert.ToInt32(entries[1]);
+                people.Add(newPerson);
+            }
+            people.Sort((x, y) => y.score.CompareTo(x.score));
+
+            List<string> output = new List<string>();
+            foreach(var person in people)
+            {
+                output.Add($"{person.name},{person.score}");
+            }
+            File.WriteAllLines(rootPath, output);
+            Console.Clear();
+            foreach(var person in people)
+            {
+                Console.WriteLine($"{person.name}: {person.score}"); 
+            }
         }
         private static Point GetNextPositionForFood(Map map)
         {
